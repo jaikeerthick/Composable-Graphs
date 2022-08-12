@@ -19,9 +19,10 @@ dependencies {
 
 ## Screenshots
 
-
-<img width="450px" src="https://raw.githubusercontent.com/jaikeerthick/Composable-Graphs/master/screenshot_1.png" />
-<img width="425px" src="https://raw.githubusercontent.com/jaikeerthick/Composable-Graphs/master/screenshot_2.png" />
+<p>
+<img width="400px" src="https://raw.githubusercontent.com/jaikeerthick/Composable-Graphs/master/screenshot_1.png" />
+<img width="375px" src="https://raw.githubusercontent.com/jaikeerthick/Composable-Graphs/master/screenshot_2.png" />
+<p/>
 <br/><br/>
 
 
