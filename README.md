@@ -104,3 +104,6 @@ And you can pass it to the graph like this:
     style = style
 )   
 ````
+    
+## Contribution:
+Fork the repo and create PRs 🦄
