@@ -1,4 +1,4 @@
-# Composable-Graphs ( Jetpack Compose ✔)
+# Composable-Graphs ( Jetpack Compose )
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose<b/>
