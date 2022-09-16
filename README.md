@@ -110,3 +110,7 @@ And you can pass it to the graph like this:
 <br/>
 
 ![](https://forthebadge.com/images/badges/built-with-love.svg)
+    
+## Contribution:
+Fork the repo and create PRs 🦄
+
