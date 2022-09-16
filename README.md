@@ -1,4 +1,4 @@
-# Composable-Graphs ( Jetpack Compose ✔)
+# Composable-Graphs ( Jetpack Compose )
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose<b/>
@@ -104,6 +104,13 @@ And you can pass it to the graph like this:
     style = style
 )   
 ````
+
+<br/>
+<br/>
+<br/>
+
+![](https://forthebadge.com/images/badges/built-with-love.svg)
     
 ## Contribution:
 Fork the repo and create PRs 🦄
+
