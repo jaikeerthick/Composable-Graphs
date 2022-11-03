@@ -59,19 +59,27 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
 
-                    Box(modifier = Modifier.fillMaxWidth()){
+                    Box(modifier = Modifier.fillMaxWidth()) {
 
-                        val clickedValue: MutableState<Pair<Any,Any>?> = remember{ mutableStateOf(null) }
+                        val clickedValue: MutableState<Pair<Any, Any>?> =
+                            remember { mutableStateOf(null) }
 
                         LineGraph(
-                            xAxisData = listOf("Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat").map {
+                            xAxisData = listOf("Sun",
+                                "Mon",
+                                "Tues",
+                                "Wed",
+                                "Thur",
+                                "Fri",
+                                "Sat").map {
                                 GraphData.String(it)
                             },
                             yAxisData = listOf(200, 40, 60, 450, 700, 30, 50),
                             style = style2,
                             onPointClicked = {
                                 clickedValue.value = it
-                            }
+                            },
+                            isPointValuesVisible = true
                         )
 
                         clickedValue.value?.let {
