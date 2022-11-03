@@ -29,13 +29,14 @@ fun LineGraph(
     yAxisData: List<Number>,
     header: @Composable() () -> Unit = {},
     style: LineGraphStyle = LineGraphStyle(),
-    onPointClicked: (pair: Pair<Any,Any>) -> Unit = {},
+    onPointClicked: (pair: Pair<Any, Any>) -> Unit = {},
+    isPointValuesVisible: Boolean = false,
 ) {
 
     val paddingRight: Dp = if (style.visibility.isYAxisLabelVisible) 20.dp else 0.dp
     val paddingBottom: Dp = if (style.visibility.isXAxisLabelVisible) 20.dp else 0.dp
 
-    val offsetList = remember{ mutableListOf<Offset>() }
+    val offsetList = remember { mutableListOf<Offset>() }
     val isPointClicked = remember { mutableStateOf(false) }
     val clickedPoint: MutableState<Offset?> = remember { mutableStateOf(null) }
 
@@ -50,9 +51,9 @@ fun LineGraph(
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
 
-    ){
+    ) {
 
-        if (style.visibility.isHeaderVisible){
+        if (style.visibility.isHeaderVisible) {
             header()
         }
 
@@ -122,7 +123,7 @@ fun LineGraph(
             val yAxisLabelList = mutableListOf<String>()
 
             for (i in 0..maxPointsSize) {
-                val intervalValue = (verticalStep*i).roundToInt()
+                val intervalValue = (verticalStep * i).roundToInt()
                 println("interval - $intervalValue")
                 yAxisLabelList.add(intervalValue.toString())
             }
@@ -130,7 +131,6 @@ fun LineGraph(
 
             val xItemSpacing = gridWidth / (maxPointsSize - 1)
             val yItemSpacing = gridHeight / (yAxisLabelList.size - 1)
-
 
 
             /**
@@ -147,7 +147,7 @@ fun LineGraph(
                     )
                 }
 
-                for (i in 0 until yAxisLabelList.size){
+                for (i in 0 until yAxisLabelList.size) {
                     // lines inclined towards y axis
                     drawLine(
                         color = Color.LightGray,
@@ -205,7 +205,8 @@ fun LineGraph(
             for (i in 0 until maxPointsSize) {
 
                 val x1 = xItemSpacing * i
-                val y1 = gridHeight - (yItemSpacing * (yAxisData[i].toFloat() / verticalStep.toFloat()))
+                val y1 =
+                    gridHeight - (yItemSpacing * (yAxisData[i].toFloat() / verticalStep.toFloat()))
 
                 offsetList.add(
                     Offset(
@@ -219,6 +220,23 @@ fun LineGraph(
                     radius = 5.dp.toPx(),
                     center = Offset(x1, y1)
                 )
+                /**
+                 * Draws point value above the point
+                 */
+                if (isPointValuesVisible) {
+                    val pointTextSize = 12.sp.toPx()
+                    val formattedValue = String.format("%02d", yAxisData[i])
+                    drawContext.canvas.nativeCanvas.drawText(
+                        formattedValue,
+                        x1, // x
+                        y1 - pointTextSize, // y
+                        Paint().apply {
+                            color = android.graphics.Color.GRAY
+                            textAlign = Paint.Align.CENTER
+                            textSize = pointTextSize
+                        }
+                    )
+                }
             }
 
 
