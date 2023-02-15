@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jaikeerthick.composable_graphs.data.GraphData
 import com.jaikeerthick.composable_graphs.helper.GraphHelper
+import com.jaikeerthick.composable_graphs.style.LabelPosition
 import com.jaikeerthick.composable_graphs.style.LineGraphStyle
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -32,7 +33,7 @@ fun LineGraph(
     onPointClicked: (pair: Pair<Any,Any>) -> Unit = {},
 ) {
 
-    val paddingRight: Dp = if (style.visibility.isYAxisLabelVisible) 20.dp else 0.dp
+    val yAxisPadding: Dp = if (style.visibility.isYAxisLabelVisible) 20.dp else 0.dp
     val paddingBottom: Dp = if (style.visibility.isXAxisLabelVisible) 20.dp else 0.dp
 
     val offsetList = remember{ mutableListOf<Offset>() }
@@ -98,8 +99,6 @@ fun LineGraph(
                 },
         ) {
 
-
-            //println("Entered scope")
             /**
              * xItemSpacing, yItemSpacing => space between each item that lies on the x and y axis
              * (size.width - 16.dp.toPx())
@@ -107,7 +106,7 @@ fun LineGraph(
              */
 
             val gridHeight = (size.height) - paddingBottom.toPx()
-            val gridWidth = size.width - paddingRight.toPx()
+            val gridWidth = if (style.yAxisLabelPosition == LabelPosition.RIGHT) size.width - yAxisPadding.toPx() else size.width
 
             // the maximum points for x and y axis to plot (maintain uniformity)
             val maxPointsSize: Int = minOf(xAxisData.size, yAxisData.size)
@@ -128,7 +127,9 @@ fun LineGraph(
             }
 
 
-            val xItemSpacing = gridWidth / (maxPointsSize - 1)
+            val xItemSpacing = if (style.yAxisLabelPosition == LabelPosition.RIGHT){
+                gridWidth / (maxPointsSize - 1)
+            } else (gridWidth - yAxisPadding.toPx()) / (maxPointsSize - 1)
             val yItemSpacing = gridHeight / (yAxisLabelList.size - 1)
 
 
@@ -161,11 +162,14 @@ fun LineGraph(
              * Drawing text labels over the x- axis
              */
             if (style.visibility.isXAxisLabelVisible) {
+
                 for (i in 0 until maxPointsSize) {
+
+                    val labelXOffset = if (style.yAxisLabelPosition == LabelPosition.RIGHT) xItemSpacing * (i) else (xItemSpacing * (i)) + yAxisPadding.toPx()
 
                     drawContext.canvas.nativeCanvas.drawText(
                         "${xAxisData[i].text}",
-                        xItemSpacing * (i), // x
+                        labelXOffset, // x
                         size.height, // y
                         Paint().apply {
                             color = android.graphics.Color.GRAY
@@ -179,11 +183,15 @@ fun LineGraph(
             /**
              * Drawing text labels over the y- axis
              */
+
             if (style.visibility.isYAxisLabelVisible) {
+
+                val labelXOffset = if (style.yAxisLabelPosition == LabelPosition.RIGHT) size.width else 0F
+
                 for (i in 0 until yAxisLabelList.size) {
                     drawContext.canvas.nativeCanvas.drawText(
                         "${yAxisLabelList[i]}",
-                        size.width, //x
+                        labelXOffset, //x
                         gridHeight - yItemSpacing * (i + 0), //y
                         Paint().apply {
                             color = android.graphics.Color.GRAY
@@ -204,7 +212,10 @@ fun LineGraph(
 
             for (i in 0 until maxPointsSize) {
 
-                val x1 = xItemSpacing * i
+                //val pos = if (style.yAxisLabelPosition == LabelPosition.RIGHT) i else (i+1)
+
+                //val x1 = xItemSpacing * pos
+                val x1 = if (style.yAxisLabelPosition == LabelPosition.RIGHT) (xItemSpacing * i) else (xItemSpacing * i) + yAxisPadding.toPx()
                 val y1 = gridHeight - (yItemSpacing * (yAxisData[i].toFloat() / verticalStep.toFloat()))
 
                 offsetList.add(
@@ -230,7 +241,7 @@ fun LineGraph(
             val path = Path().apply {
                 // starting point for gradient
                 moveTo(
-                    x = 0f,
+                    x = if (style.yAxisLabelPosition == LabelPosition.RIGHT) 0F else yAxisPadding.toPx(),
                     y = gridHeight
                 )
 
@@ -240,7 +251,7 @@ fun LineGraph(
 
                 // ending point for gradient
                 lineTo(
-                    x = xItemSpacing * (yAxisData.size - 1),
+                    x = if (style.yAxisLabelPosition == LabelPosition.RIGHT) xItemSpacing * (yAxisData.size - 1) else gridWidth,
                     y = gridHeight
                 )
 
