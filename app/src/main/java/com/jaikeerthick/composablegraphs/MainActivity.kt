@@ -19,10 +19,7 @@ import com.jaikeerthick.composable_graphs.color.*
 import com.jaikeerthick.composable_graphs.composables.BarGraph
 import com.jaikeerthick.composable_graphs.composables.LineGraph
 import com.jaikeerthick.composable_graphs.data.GraphData
-import com.jaikeerthick.composable_graphs.style.BarGraphStyle
-import com.jaikeerthick.composable_graphs.style.BarGraphVisibility
-import com.jaikeerthick.composable_graphs.style.LineGraphStyle
-import com.jaikeerthick.composable_graphs.style.LinearGraphVisibility
+import com.jaikeerthick.composable_graphs.style.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 val style2 = LineGraphStyle(
                     visibility = LinearGraphVisibility(
                         isHeaderVisible = true,
-                        isYAxisLabelVisible = false,
+                        isYAxisLabelVisible = true,
                         isCrossHairVisible = true
                     ),
                     colors = LinearGraphColors(
@@ -49,7 +46,8 @@ class MainActivity : ComponentActivity() {
                         fillGradient = Brush.verticalGradient(
                             listOf(Gradient3, Gradient2)
                         )
-                    )
+                    ),
+                    yAxisLabelPosition = LabelPosition.RIGHT
                 )
 
                 Column(
