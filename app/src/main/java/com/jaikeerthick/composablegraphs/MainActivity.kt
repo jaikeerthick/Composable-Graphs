@@ -64,13 +64,7 @@ class MainActivity : ComponentActivity() {
                             remember { mutableStateOf(null) }
 
                         LineGraph(
-                            xAxisData = listOf("Sun",
-                                "Mon",
-                                "Tues",
-                                "Wed",
-                                "Thur",
-                                "Fri",
-                                "Sat").map {
+                            xAxisData = listOf("Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat").map {
                                 GraphData.String(it)
                             },
                             yAxisData = listOf(200, 40, 60, 450, 700, 30, 50),
@@ -78,7 +72,6 @@ class MainActivity : ComponentActivity() {
                             onPointClicked = {
                                 clickedValue.value = it
                             },
-                            isPointValuesVisible = true
                         )
 
                         clickedValue.value?.let {
