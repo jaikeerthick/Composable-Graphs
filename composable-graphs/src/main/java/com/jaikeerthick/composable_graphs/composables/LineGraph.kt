@@ -135,24 +135,31 @@ fun LineGraph(
 
 
             /**
-             * Drawing Grid lines inclined towards x axis
+             * Drawing Grid lines
              */
             if (style.visibility.isGridVisible) {
+
                 for (i in 0 until maxPointsSize) {
 
                     // lines inclined towards x axis
+
+                    val labelXOffset = if (style.yAxisLabelPosition == LabelPosition.RIGHT) xItemSpacing * (i) else (xItemSpacing * (i)) + yAxisPadding.toPx()
+
                     drawLine(
                         color = Color.LightGray,
-                        start = Offset(xItemSpacing * (i), 0f),
-                        end = Offset(xItemSpacing * (i), gridHeight),
+                        start = Offset(labelXOffset, 0f),
+                        end = Offset(labelXOffset, gridHeight),
                     )
                 }
 
                 for (i in 0 until yAxisLabelList.size){
                     // lines inclined towards y axis
+
+                    val labelXOffset = if (style.yAxisLabelPosition == LabelPosition.RIGHT) 0F else yAxisPadding.toPx()
+
                     drawLine(
                         color = Color.LightGray,
-                        start = Offset(0f, gridHeight - yItemSpacing * (i)),
+                        start = Offset(labelXOffset, gridHeight - yItemSpacing * (i)),
                         end = Offset(gridWidth, gridHeight - yItemSpacing * (i)),
                     )
                 }
