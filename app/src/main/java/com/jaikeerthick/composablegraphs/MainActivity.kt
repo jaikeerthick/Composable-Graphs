@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
                     visibility = LinearGraphVisibility(
                         isHeaderVisible = true,
                         isYAxisLabelVisible = true,
-                        isCrossHairVisible = true
+                        isCrossHairVisible = true,
+                        isGridVisible = true
                     ),
                     colors = LinearGraphColors(
                         lineColor = GraphAccent2,
