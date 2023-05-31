@@ -4,9 +4,6 @@ import androidx.compose.ui.graphics.Color
 
 
 
-
-
-
 val GraphAccent = Color(0xFF9C27B0)
 val GraphAccent2 = Color(0xFF239728)
 
