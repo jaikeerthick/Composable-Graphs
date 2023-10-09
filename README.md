@@ -1,3 +1,5 @@
+<img src="https://github.com/jaikeerthick/Composable-Graphs/blob/58cf7ca20b465bdf6539d633c331f814e1a8fa0f/Composable-Graphs-Poster.jpg">
+
 # Composable-Graphs ( Jetpack Compose )
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
 
