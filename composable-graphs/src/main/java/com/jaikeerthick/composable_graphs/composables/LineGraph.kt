@@ -2,35 +2,68 @@ package com.jaikeerthick.composable_graphs.composables
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.PointMode
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jaikeerthick.composable_graphs.data.GraphData
 import com.jaikeerthick.composable_graphs.helper.GraphHelper
+import com.jaikeerthick.composable_graphs.style.DEFAULT_LINE_GRAPH_HEIGHT
+import com.jaikeerthick.composable_graphs.style.DEFAULT_LINE_GRAPH_PADDING
 import com.jaikeerthick.composable_graphs.style.LabelPosition
 import com.jaikeerthick.composable_graphs.style.LineGraphStyle
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
+/**
+ * [LineData] is simply a point for [LineGraph].
+ * @param x String that should be displayed in the x axis of this point
+ * @param y Value, that the point should be plotted on the graph with respect to y-axis.
+ */
+data class LineData(
+    val x: String,
+    val y: Number
+)
+
 @Composable
 fun LineGraph(
-    xAxisData: List<GraphData>,
-    yAxisData: List<Number>,
-    header: @Composable() () -> Unit = {},
+    modifier: Modifier = Modifier,
+    data: List<LineData>,
     style: LineGraphStyle = LineGraphStyle(),
-    onPointClicked: (pair: Pair<Any,Any>) -> Unit = {},
+    onPointClick: (data: LineData) -> Unit = {},
+){
+    LineGraphImpl(
+        modifier = modifier,
+        xAxisData = data.map { it.x },
+        yAxisData = data.map { it.y },
+        style = style,
+        onPointClick = onPointClick
+    )
+}
+
+@Composable
+private fun LineGraphImpl(
+    modifier: Modifier,
+    xAxisData: List<String>,
+    yAxisData: List<Number>,
+    style: LineGraphStyle,
+    onPointClick: (data: LineData) -> Unit,
 ) {
 
     val yAxisPadding: Dp = if (style.visibility.isYAxisLabelVisible) 20.dp else 0.dp
@@ -40,63 +73,66 @@ fun LineGraph(
     val isPointClicked = remember { mutableStateOf(false) }
     val clickedPoint: MutableState<Offset?> = remember { mutableStateOf(null) }
 
+    val defaultModifier = Modifier
+        .fillMaxWidth()
+        .height(height = DEFAULT_LINE_GRAPH_HEIGHT)
+        .padding(paddingValues = DEFAULT_LINE_GRAPH_PADDING)
+        .pointerInput(true) {
 
-    Column(
-        modifier = Modifier
-            .background(
-                color = style.colors.backgroundColor
-            )
-            .fillMaxWidth()
-            .padding(style.paddingValues)
-            .padding(top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        detectTapGestures { p1: Offset ->
 
-    ){
+            val shortest = offsetList.find { p2: Offset ->
 
-        if (style.visibility.isHeaderVisible){
-            header()
+                /** Pythagorean Theorem
+                 * Using Pythagorean theorem to calculate distance between two points :
+                 * p1 =  p1(x,y) which is the touch point
+                 * p2 =  p2(x,y)) which is the point plotted on graph
+                 * Formula: c = sqrt(a² + b²), where a = (p1.x - p2.x) & b = (p1.y - p2.y),
+                 * c is the distance between p1 & p2
+                Pythagorean Theorem */
+
+                val distance = sqrt(
+                    (p1.x - p2.x).pow(2) + (p1.y - p2.y).pow(2)
+                )
+                val pointRadius = 15.dp.toPx()
+
+                distance <= pointRadius
+            }
+
+            shortest?.let {
+
+                clickedPoint.value = it
+                isPointClicked.value = true
+
+                //
+                val index = offsetList.indexOf(it)
+                onPointClick(
+                    LineData(
+                        x = xAxisData[index],
+                        y = yAxisData[index]
+                    )
+                )
+            }
+
         }
 
+    }
+
+
+
+//    Column(
+//        modifier = Modifier
+//            .background(
+//                color = style.colors.backgroundColor
+//            )
+//            .padding(style.paddingValues)
+//            .padding(top = 16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp)
+//
+//    ){
+
         Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(style.height)
-                .padding(horizontal = 10.dp)
-                .pointerInput(true) {
-
-                    detectTapGestures { p1: Offset ->
-
-                        val shortest = offsetList.find { p2: Offset ->
-
-                            /** Pythagorean Theorem
-                             * Using Pythagorean theorem to calculate distance between two points :
-                             * p1 =  p1(x,y) which is the touch point
-                             * p2 =  p2(x,y)) which is the point plotted on graph
-                             * Formula: c = sqrt(a² + b²), where a = (p1.x - p2.x) & b = (p1.y - p2.y),
-                             * c is the distance between p1 & p2
-                            Pythagorean Theorem */
-
-                            val distance = sqrt(
-                                (p1.x - p2.x).pow(2) + (p1.y - p2.y).pow(2)
-                            )
-                            val pointRadius = 15.dp.toPx()
-
-                            distance <= pointRadius
-                        }
-
-                        shortest?.let {
-
-                            clickedPoint.value = it
-                            isPointClicked.value = true
-
-                            //
-                            val index = offsetList.indexOf(it)
-                            onPointClicked(Pair(xAxisData[index].text, yAxisData[index]))
-                        }
-
-                    }
-
-                },
+            modifier = modifier.then(defaultModifier)
         ) {
 
             /**
@@ -175,7 +211,7 @@ fun LineGraph(
                     val labelXOffset = if (style.yAxisLabelPosition == LabelPosition.RIGHT) xItemSpacing * (i) else (xItemSpacing * (i)) + yAxisPadding.toPx()
 
                     drawContext.canvas.nativeCanvas.drawText(
-                        "${xAxisData[i].text}",
+                        xAxisData[i],
                         labelXOffset, // x
                         size.height, // y
                         Paint().apply {
@@ -197,7 +233,7 @@ fun LineGraph(
 
                 for (i in 0 until yAxisLabelList.size) {
                     drawContext.canvas.nativeCanvas.drawText(
-                        "${yAxisLabelList[i]}",
+                        yAxisLabelList[i],
                         labelXOffset, //x
                         gridHeight - yItemSpacing * (i + 0), //y
                         Paint().apply {
@@ -308,9 +344,6 @@ fun LineGraph(
             }
 
         }
-    }
-
-
 }
 
 
