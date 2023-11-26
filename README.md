@@ -3,6 +3,9 @@
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose<b/>
 
+## Important ⚠️
+Please migrate to ```v1.2.2``` or above if you are using lower versions and refer the updated documentation below for the usage
+
 ## Gradle Setup
 Latest version: [![](https://jitpack.io/v/jaikeerthick/Composable-Graphs.svg)](https://jitpack.io/#jaikeerthick/Composable-Graphs)
 
@@ -14,7 +17,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.jaikeerthick:Composable-Graphs:v1.0'
+    implementation 'com.github.jaikeerthick:Composable-Graphs:v1.2.2'
 }
 ```
 
