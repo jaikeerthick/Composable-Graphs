@@ -2,7 +2,7 @@
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose<b/>
-    
+
 ## Gradle Setup
 Latest version: [![](https://jitpack.io/v/jaikeerthick/Composable-Graphs.svg)](https://jitpack.io/#jaikeerthick/Composable-Graphs)
 
@@ -28,60 +28,49 @@ dependencies {
 
 
 ## Usage
-    
+
 1. Bar Graph
 
 ```kotlin
 BarGraph(
-  dataList = listOf(20, 30, 10, 60, 35), //  dataList : List<Number>
+    data = listOf(BarData(x = "22", y = 20), BarData(x = "23", y = 30)),
 )
 ```
-    
+
 2. Line Graph
 
 ```kotlin
+val data = listOf(LineData(x = "Sun", y = 200), LineData(x = "Mon", y = 40))
+
 LineGraph(
-    xAxisData = listOf("Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat").map {
-        GraphData.String(it)
-    }, // xAxisData : List<GraphData>, and GraphData accepts both Number and String types
-    yAxisData = listOf(200, 40, 60, 450, 700, 30, 50),
+    modifier = Modifier
+        .padding(horizontal = 16.dp, vertical = 12.dp),
+    data = data,
+    onPointClick = { value: LineData ->
+        // do something with value
+    },
 )
 ```
-    
-Example for passing String and Number:
-    
-```kotlin
-xAxisData = listOf("Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat").map {
-                       GraphData.String(it)
-            }
-
-xAxisData = listOf(20, 40, 30, 50, 70, 0, 40).map {
-                       GraphData.Number(it)
-            }
-``` 
-    
-<b>Note:<b/> ```xAxisData``` can be of ```GraphData.String``` & ```GraphData.Number```, but ```yAxisData``` can be only of type ```Number```
 
 ## Styling
-    
-```BarGraphStyle``` and ```LineGraphStyle``` can be used to style the Graphs effetively
 
-You can control the following things using Style classes:
+Create stunning & colorful graphs with awesome styling 🎨
 
-- Height
-- Padding
+Composable-Graphs supports various styling helpers:
+
+- Modifier (Yes, We heard you!💬)
+- Visibility
 - Colors
-- Visibility - control visibility for crosshair, labels, headers, etc.
-    
+- LabelPosition
+
 ``` kotlin
-// BarGraph
 val style = BarGraphStyle(
                     visibility = BarGraphVisibility(
                         isYAxisLabelVisible = true
-                    )
+                    ),
+                    yAxisLabelPosition = LabelPosition.RIGHT
                 )
 
-// LineGraph
 val style2 = LineGraphStyle(
                     visibility = LinearGraphVisibility(
                         isHeaderVisible = true,
@@ -92,26 +81,19 @@ val style2 = LineGraphStyle(
                         lineColor = GraphAccent2,
                         pointColor = GraphAccent2,
                         clickHighlightColor = PointHighlight2,
-                        fillGradient = Brush.verticalGradient(
-                            listOf(Gradient3, Gradient2)
+                        fillType = LineGraphFillType.Gradient(
+                            brush = Brush.verticalGradient(listOf(Color.Green, Color.Yellow))
                         )
                     )
                 )
 ````
-And you can pass it to the graph like this:
-````kotlin
- BarGraph(
-    dataList = listOf(20, 30, 10, 60, 35),
-    style = style
-)   
-````
 
-<br/>
+
 <br/>
 <br/>
 
 ![](https://forthebadge.com/images/badges/built-with-love.svg)
-    
+
 ## Contribution:
 Fork the repo and create PRs 🦄
 

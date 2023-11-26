@@ -82,15 +82,6 @@ fun MainApp() {
 
             BarGraph(
                 data = viewModel.barGraphData,
-                style = BarGraphStyle(
-                    visibility = BarGraphVisibility(
-                        isYAxisLabelVisible = true
-                    ),
-                    yAxisLabelPosition = LabelPosition.RIGHT
-                ),
-                onBarClick = {
-                    println("JAIKKK : ${it}")
-                }
             )
         }
     }
