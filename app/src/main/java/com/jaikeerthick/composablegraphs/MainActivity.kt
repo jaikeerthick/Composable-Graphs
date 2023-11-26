@@ -3,10 +3,8 @@ package com.jaikeerthick.composablegraphs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,19 +22,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jaikeerthick.composable_graphs.color.GraphAccent2
-import com.jaikeerthick.composable_graphs.composables.BarGraph
-import com.jaikeerthick.composable_graphs.composables.LineData
-import com.jaikeerthick.composable_graphs.composables.LineGraph
+import com.jaikeerthick.composable_graphs.composables.bar.BarGraph
+import com.jaikeerthick.composable_graphs.composables.bar.style.BarGraphStyle
+import com.jaikeerthick.composable_graphs.composables.bar.style.BarGraphVisibility
+import com.jaikeerthick.composable_graphs.composables.line.LineGraph
+import com.jaikeerthick.composable_graphs.style.LabelPosition
+import com.jaikeerthick.composablegraphs.theme.GraphAccent2
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             MainApp()
         }
-
     }
 }
 
@@ -46,7 +43,8 @@ fun MainApp() {
 
     MaterialTheme {
 
-        val viewModel = MainActivityViewModel() // WARNING! : This is not the proper way of initializing viewModel
+        // WARNING! : This is not the proper way of initializing viewModel, This is just a simple example for demonstration of Composable-Graphs library.
+        val viewModel = remember { MainActivityViewModel() }
 
         Column(
             modifier = Modifier
@@ -82,7 +80,18 @@ fun MainApp() {
                 )
             }
 
-            BarGraph(data = viewModel.barGraphData)
+            BarGraph(
+                data = viewModel.barGraphData,
+                style = BarGraphStyle(
+                    visibility = BarGraphVisibility(
+                        isYAxisLabelVisible = true
+                    ),
+                    yAxisLabelPosition = LabelPosition.RIGHT
+                ),
+                onBarClick = {
+                    println("JAIKKK : ${it}")
+                }
+            )
         }
     }
 }

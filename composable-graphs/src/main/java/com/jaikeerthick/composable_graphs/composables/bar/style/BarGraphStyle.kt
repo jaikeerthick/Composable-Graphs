@@ -1,12 +1,12 @@
-package com.jaikeerthick.composable_graphs.style
+package com.jaikeerthick.composable_graphs.composables.bar.style
 
-import com.jaikeerthick.composable_graphs.color.BarGraphColors
+import com.jaikeerthick.composable_graphs.style.LabelPosition
 
 
 data class BarGraphStyle(
     val colors: BarGraphColors = BarGraphColors(),
     val visibility: BarGraphVisibility = BarGraphVisibility(),
-    //val yAxisLabelPosition: LabelPosition = LabelPosition.LEFT
+    val yAxisLabelPosition: LabelPosition = LabelPosition.RIGHT
 )
 
 

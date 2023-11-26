@@ -1,39 +1,22 @@
 package com.jaikeerthick.composablegraphs
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Brush
 import androidx.lifecycle.ViewModel
-import com.jaikeerthick.composable_graphs.color.Gradient2
-import com.jaikeerthick.composable_graphs.color.Gradient3
-import com.jaikeerthick.composable_graphs.color.GraphAccent2
-import com.jaikeerthick.composable_graphs.color.LinearGraphColors
-import com.jaikeerthick.composable_graphs.color.PointHighlight2
-import com.jaikeerthick.composable_graphs.composables.BarData
-import com.jaikeerthick.composable_graphs.composables.LineData
+import com.jaikeerthick.composable_graphs.composables.bar.model.BarData
+import com.jaikeerthick.composable_graphs.composables.line.model.LineData
+import com.jaikeerthick.composable_graphs.composables.line.style.LineGraphStyle
+import com.jaikeerthick.composable_graphs.composables.line.style.LineGraphVisibility
 import com.jaikeerthick.composable_graphs.style.LabelPosition
-import com.jaikeerthick.composable_graphs.style.LineGraphStyle
-import com.jaikeerthick.composable_graphs.style.LinearGraphVisibility
 
 class MainActivityViewModel: ViewModel() {
 
     /**
-     * Customizing [LineGraphStyle] (Optional)
+     * Customizing [LineGraphStyle]
      */
     internal val lineGraphCustomStyle = LineGraphStyle(
-        visibility = LinearGraphVisibility(
+        visibility = LineGraphVisibility(
             isYAxisLabelVisible = true,
             isCrossHairVisible = true,
             isGridVisible = true
-        ),
-        colors = LinearGraphColors(
-            lineColor = GraphAccent2,
-            pointColor = GraphAccent2,
-            clickHighlightColor = PointHighlight2,
-            fillGradient = Brush.verticalGradient(
-                listOf(Gradient3, Gradient2)
-            )
         ),
         yAxisLabelPosition = LabelPosition.LEFT
     )
@@ -49,7 +32,7 @@ class MainActivityViewModel: ViewModel() {
     )
 
     internal val barGraphData = listOf(
-        BarData(x = "22werifbwwwefwefwefewdfief", y = 20),
+        BarData(x = "22", y = 20),
         BarData(x = "23", y = 30),
         BarData(x = "24", y = 10),
         BarData(x = "25", y = 60),
