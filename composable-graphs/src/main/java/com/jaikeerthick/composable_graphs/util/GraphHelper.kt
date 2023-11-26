@@ -1,23 +1,23 @@
-package com.jaikeerthick.composable_graphs.helper
+package com.jaikeerthick.composable_graphs.util
 
 import kotlin.math.roundToInt
 
-object GraphHelper {
+internal object GraphHelper {
 
-    fun getAbsoluteMax(list: List<Number>): Number{
+    internal fun getAbsoluteMax(list: List<Number>): Number{
         return list.maxByOrNull {
             it.toFloat().roundToInt()
         } ?: 0
     }
 
-    fun getAbsoluteMin(list: List<Number>): Number{
+    internal fun getAbsoluteMin(list: List<Number>): Number{
         return list.minByOrNull {
             it.toFloat().roundToInt()
         } ?: 0
     }
 
 
-    fun roundMaxYPoint(point: Number): Number{
+    internal fun roundMaxYPoint(point: Number): Number{
 
         // maxYPoint - the point gonna be rounded
         var maxYPoint = point
@@ -30,9 +30,6 @@ object GraphHelper {
             maxYPoint = (maxYPoint.toFloat() / 10.0).roundToInt() * 10
             maxYPoint += 10
         }
-
         return maxYPoint
-
     }
-
 }
