@@ -78,7 +78,6 @@ val style = BarGraphStyle(
 
 val style2 = LineGraphStyle(
                     visibility = LinearGraphVisibility(
-                        isHeaderVisible = true,
                         isYAxisLabelVisible = false,
                         isCrossHairVisible = true
                     ),
