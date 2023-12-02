@@ -32,4 +32,9 @@ internal object GraphHelper {
         }
         return maxYPoint
     }
+
+    internal fun convertPercentageToDegree(percentage: Float): Float{
+        // Desired Result: 0F..100F = 0F..360F
+        return (percentage/100F) * 360F
+    }
 }
