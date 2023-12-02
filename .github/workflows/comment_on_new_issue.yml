@@ -1,3 +1,4 @@
+name: "CommentOnNewIssue"
 on:
   issues:
     types: [opened]
