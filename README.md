@@ -4,6 +4,7 @@
 [![CodeQL](https://github.com/jaikeerthick/Composable-Graphs/actions/workflows/codeql.yml/badge.svg)](https://github.com/jaikeerthick/Composable-Graphs/actions/workflows/codeql.yml)
 [![](https://jitpack.io/v/jaikeerthick/Composable-Graphs.svg)](https://jitpack.io/#jaikeerthick/Composable-Graphs)
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
+<a href="https://jetc.dev/issues/128.html"><img src="https://img.shields.io/badge/As_Seen_In-jetc.dev_Newsletter_Issue_%23128-blue?logo=Jetpack+Compose&amp;logoColor=white" alt="As Seen In - jetc.dev Newsletter Issue #128"></a>
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose<b/>
 
