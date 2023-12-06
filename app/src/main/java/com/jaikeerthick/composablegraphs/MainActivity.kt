@@ -26,6 +26,10 @@ import com.jaikeerthick.composable_graphs.composables.bar.BarGraph
 import com.jaikeerthick.composable_graphs.composables.bar.style.BarGraphStyle
 import com.jaikeerthick.composable_graphs.composables.bar.style.BarGraphVisibility
 import com.jaikeerthick.composable_graphs.composables.line.LineGraph
+import com.jaikeerthick.composable_graphs.composables.pie.PieChart
+import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
+import com.jaikeerthick.composable_graphs.composables.pie.style.PieChartStyle
+import com.jaikeerthick.composable_graphs.composables.pie.style.PieChartVisibility
 import com.jaikeerthick.composable_graphs.style.LabelPosition
 import com.jaikeerthick.composablegraphs.theme.GraphAccent2
 
@@ -80,8 +84,23 @@ fun MainApp() {
                 )
             }
 
-            BarGraph(
-                data = viewModel.barGraphData,
+            val previewData = remember {
+                listOf(
+                    PieData(value = 130F, label = "HTC"),
+                    PieData(value = 260F, label = "Apple"),
+                    PieData(value = 500F, label = "Google"),
+                )
+            }
+
+            PieChart(
+                data = previewData,
+                style = PieChartStyle(
+                    visibility = PieChartVisibility(
+                        isLabelVisible = true,
+                        isPercentageVisible = true
+                    )
+                ),
+                onSliceClick = {}
             )
         }
     }
