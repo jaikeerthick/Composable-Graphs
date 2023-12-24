@@ -1,6 +1,7 @@
 package com.jaikeerthick.composable_graphs.composables.pie
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
 import com.jaikeerthick.composable_graphs.composables.pie.model.PieSlice
@@ -11,11 +12,7 @@ import java.math.RoundingMode
 import kotlin.math.roundToInt
 
 
-internal class PieChartHelper{
-
-}
-
-internal fun List<PieData>.mapToPieSliceList(scope: DrawScope, radius: Float): List<PieSlice>{
+internal fun List<PieData>.mapToPieSliceList(radius: Float, pieSize: Size): List<PieSlice>{
 
     val total = this.map{ it.value }.sum()
 
@@ -29,8 +26,8 @@ internal fun List<PieData>.mapToPieSliceList(scope: DrawScope, radius: Float): L
         val startAngle = startAngleTemp
         val endAngle = startAngleTemp + convertPercentageToDegree(percentage)
 
-        val startOffset = scope.getOffsetOfAngle(angle = startAngle, radius = radius)
-        val endOffset = scope.getOffsetOfAngle(angle = endAngle, radius = radius)
+        val startOffset = getOffsetOfAngle(angle = startAngle, radius = radius, pieSize)
+        val endOffset = getOffsetOfAngle(angle = endAngle, radius = radius, pieSize)
 
         startAngleTemp = endAngle
 

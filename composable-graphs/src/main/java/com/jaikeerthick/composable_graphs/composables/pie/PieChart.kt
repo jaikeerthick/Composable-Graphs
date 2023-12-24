@@ -45,7 +45,7 @@ fun PieChart(
     modifier: Modifier = Modifier,
     data: List<PieData>,
     style: PieChartStyle = PieChartStyle(),
-    onSliceClick: (PieData) -> Unit
+    onSliceClick: ((PieData) -> Unit)? = null
 ) {
     PieChartImpl(
         modifier = modifier,
@@ -60,57 +60,50 @@ private fun PieChartImpl(
     modifier: Modifier,
     data: List<PieData>,
     style: PieChartStyle,
-    onSliceClick: (PieData) -> Unit
+    onSliceClick: ((PieData) -> Unit)? = null
 ) {
 
     val pieSliceList = remember { mutableListOf<PieSlice>() }
     var radiusF = remember { 0F }
     var centerF = remember { Offset(0F, 0F) }
-    var clickedSlice: PieSlice? by remember { mutableStateOf(null) }
 
+    val tapDetectModifier = if (onSliceClick == null) Modifier else {
+        Modifier
+            .pointerInput(Unit) {
+                detectTapGestures { p1: Offset ->
+
+                    val isInsideCircle: Boolean = let {
+                        val clickRadius = sqrt((p1.x - centerF.x).pow(2) + (p1.y - centerF.y).pow(2))
+                        clickRadius <= radiusF
+                    }
+
+                    if (isInsideCircle) {
+
+                        var touchAngle = getAngleFromOffset(
+                            offset = p1,
+                            radiusF
+                        ) - 270F // -270 -> because we are shifting the chart by -90F in all places
+
+                        while (touchAngle < 0F) {
+                            touchAngle += 360.0F
+                        }
+
+                        val clickedSlice = pieSliceList.find { slice ->
+
+                            //println("JAIKKK--- check --- : start: ${slice.startAngle}, end: ${slice.endAngle}, clicked: $touchAngle")
+                            (touchAngle >= slice.startAngle && touchAngle <= slice.endAngle)
+                        }
+                        val clickedPieData = data.find { clickedSlice?.label == it.label }
+                        clickedPieData?.let { onSliceClick(it) }
+                    }
+                }
+            }
+    }
 
     val defaultModifier = Modifier
         .size(size = DEFAULT_GRAPH_HEIGHT)
         .padding(12.dp)
-        .pointerInput(true) {
-            detectTapGestures { p1: Offset ->
-
-                val isInsideCircle: Boolean = let {
-                    val clickRadius = sqrt((p1.x - centerF.x).pow(2) + (p1.y - centerF.y).pow(2))
-                    clickRadius <= radiusF
-                }
-
-                if (isInsideCircle) {
-
-                    var touchAngle = getAngleFromOffset(
-                        offset = p1,
-                        radiusF
-                    ) - 270F // -270 -> because we are shifting the chart by -90F in all places
-
-                    while (touchAngle < 0F) {
-                        touchAngle += 360.0F
-                    }
-
-                    val slice = pieSliceList.find { slice ->
-
-                        //println("JAIKKK--- check --- : start: ${slice.startAngle}, end: ${slice.endAngle}, clicked: $touchAngle")
-                        (touchAngle >= slice.startAngle && touchAngle <= slice.endAngle)
-                    }
-
-                    clickedSlice = slice
-                    //println("JAIKKK, clicked slice = ${slice?.label}")
-                }
-            }
-        }
-
-    LaunchedEffect(key1 = clickedSlice, block = {
-        if (clickedSlice != null){
-            println("JAIKKK, click detected.. attempting to reduce alpha")
-           pieSliceList.forEach { slice ->
-               slice.color.value = slice.color.value.copy(alpha = 0.2F)
-           }
-        }
-    })
+        .then(tapDetectModifier)
 
 
     Canvas(
@@ -118,13 +111,22 @@ private fun PieChartImpl(
         onDraw = {
 
             val minWidthAndHeight = listOf(this.size.width, this.size.height).minOf { it }
+
+            /**
+             * Don't use [center] or [size] of canvas
+             * Only use [pieCenter] and [pieSize] because we are maintaining same width and height
+             * for the Pie
+             */
+            val pieSize = Size(minWidthAndHeight, minWidthAndHeight)
+            val pieCenter = Offset(x = pieSize.width/2, y = pieSize.height/2)
             val radius = minWidthAndHeight / 2
+
             radiusF = radius
-            centerF = center
+            centerF = pieCenter
 
             pieSliceList.apply {
                 clear()
-                addAll(data.mapToPieSliceList(this@Canvas, radius))
+                addAll(data.mapToPieSliceList(radius, pieSize))
             }
 
             /**
@@ -137,15 +139,16 @@ private fun PieChartImpl(
                     sweepAngle = value.endAngle,  // minus startAngle from endAngle to make sure we only draw the required arc and not from 0 for every arcs
                     useCenter = true,
                     style = Fill,
-                    size = Size(minWidthAndHeight, minWidthAndHeight),
+                    size = pieSize,
                     blendMode = style.colors.blendMode ?: DrawScope.DefaultBlendMode,
                     colorFilter = style.colors.colorFilter
                 )
             }
 
+            val defaultTextSize = if ((radiusF/16).sp >= 14.sp) 14.sp else (radiusF/16).sp
             val marginBetweenTexts =
                 if (style.visibility.isLabelVisible && style.visibility.isPercentageVisible) {
-                    7.sp.toPx()
+                    (defaultTextSize/1.5).toPx()
                 } else 0.sp.toPx()
 
             /**
@@ -158,9 +161,9 @@ private fun PieChartImpl(
                     if (value.label != null) {
 
                         val midAngle = ((value.startAngle + value.endAngle) / 2) - 90F
-                        val midOffSet = getOffsetOfAngle(angle = midAngle, radius = radius)
+                        val midOffSet = getOffsetOfAngle(angle = midAngle, radius = radius, pieSize = pieSize)
 
-                        val centerOfSlice = centerOf(midOffSet, center)
+                        val centerOfSlice = centerOf(midOffSet, pieCenter)
 
                         drawContext.canvas.nativeCanvas.drawText(
                             value.label,
@@ -169,7 +172,7 @@ private fun PieChartImpl(
                             Paint().apply {
                                 color = value.labelColor?.toArgb() ?: Color.White.toArgb()
                                 textAlign = Paint.Align.CENTER
-                                textSize = 12.sp.toPx()
+                                this.textSize = defaultTextSize.toPx()
                             }
                         )
                     }
@@ -184,9 +187,9 @@ private fun PieChartImpl(
                 pieSliceList.reversed().forEach { value ->
 
                     val midAngle = ((value.startAngle + value.endAngle) / 2) - 90F
-                    val midOffSet = getOffsetOfAngle(angle = midAngle, radius = radius)
+                    val midOffSet = getOffsetOfAngle(angle = midAngle, radius = radius, pieSize = pieSize)
 
-                    val centerOfSlice = centerOf(midOffSet, center)
+                    val centerOfSlice = centerOf(midOffSet, pieCenter)
 
                     drawContext.canvas.nativeCanvas.drawText(
                         value.percentage,
@@ -195,7 +198,7 @@ private fun PieChartImpl(
                         Paint().apply {
                             color = value.labelColor?.toArgb() ?: Color.White.toArgb()
                             textAlign = Paint.Align.CENTER
-                            textSize = 12.sp.toPx()
+                            this.textSize = defaultTextSize.toPx()
                         }
                     )
                 }
@@ -224,7 +227,6 @@ private fun PieChartPreview() {
                 isLabelVisible = true,
                 isPercentageVisible = true
             )
-        ),
-        onSliceClick = {}
+        )
     )
 }

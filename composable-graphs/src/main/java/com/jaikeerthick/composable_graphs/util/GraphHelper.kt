@@ -1,6 +1,7 @@
 package com.jaikeerthick.composable_graphs.util
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -54,10 +55,11 @@ internal object GraphHelper {
         return Offset(xOffset, yOffset)
     }
 
-    internal fun DrawScope.getOffsetOfAngle(angle: Float, radius: Float): Offset {
+    internal fun getOffsetOfAngle(angle: Float, radius: Float, pieSize: Size): Offset {
+        val pieCenter = Offset(x = pieSize.width/2, y = pieSize.height/2)
         return Offset(
-            x = (cos(Math.toRadians(angle.toDouble())) * radius + center.x).toFloat(),
-            y = (sin(Math.toRadians(angle.toDouble())) * radius + center.y).toFloat()
+            x = (cos(Math.toRadians(angle.toDouble())) * radius + pieCenter.x).toFloat(),
+            y = (sin(Math.toRadians(angle.toDouble())) * radius + pieCenter.y).toFloat()
         )
     }
 
