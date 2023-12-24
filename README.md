@@ -1,11 +1,11 @@
 <img src="/Composable-Graphs-Poster.svg">
 
 # Composable-Graphs
-![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?logo=kotlin&logoColor=white)
+[![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![CodeQL](https://github.com/jaikeerthick/Composable-Graphs/actions/workflows/codeql.yml/badge.svg)](https://github.com/jaikeerthick/Composable-Graphs/actions/workflows/codeql.yml)
 [![](https://jitpack.io/v/jaikeerthick/Composable-Graphs.svg)](https://jitpack.io/#jaikeerthick/Composable-Graphs)
 ![tag](https://img.shields.io/github/license/jaikeerthick/Composable-Graphs)
-![Jetpack Compose](https://img.shields.io/badge/Built%20with-Jetpack%20Compose%20%E2%9D%A4%EF%B8%8F-2DA042)<br>
+[![Jetpack Compose](https://img.shields.io/badge/Built%20with-Jetpack%20Compose%20%E2%9D%A4%EF%B8%8F-2DA042)](https://developer.android.com/jetpack/compose)<br>
 <a href="https://jetc.dev/issues/128.html"><img alt="jetc.dev" src="https://img.shields.io/badge/jetc.dev-%23128-343a40.svg?style=flat&logo=jetpackcompose"/></a>
 
 ✨ A very Minimal, Sleek and Lightweight Graph library for Android using <b>Jetpack Compose</b>
