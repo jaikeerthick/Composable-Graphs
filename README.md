@@ -99,11 +99,13 @@ val style2 = LineGraphStyle(
 ````
 
 
+## Work In Progress:
+
+1. PieChart
+2. DonutChart
+
 <br/>
 <br/>
 
-![](https://forthebadge.com/images/badges/built-with-love.svg)
-
-## Contribution:
-Fork the repo and create PRs 🦄
+## Contribution are welcome ❤️
 
