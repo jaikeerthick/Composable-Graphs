@@ -15,7 +15,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jaikeerthick.composable_graphs.composables.bar.model.BarData
 import com.jaikeerthick.composable_graphs.composables.bar.style.BarGraphStyle
-import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_HEIGHT
+import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
 import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_PADDING
 
 
@@ -50,7 +50,7 @@ private fun BarGraphImpl(
 
     val defaultModifier = Modifier
         .fillMaxWidth()
-        .height(height = DEFAULT_GRAPH_HEIGHT)
+        .height(height = DEFAULT_GRAPH_SIZE)
         .padding(paddingValues = DEFAULT_GRAPH_PADDING)
         .pointerInput(true) {
             detectTapGestures { p1: Offset ->

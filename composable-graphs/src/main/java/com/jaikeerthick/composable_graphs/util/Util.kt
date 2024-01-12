@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.jaikeerthick.composable_graphs.BuildConfig
 
-internal val DEFAULT_GRAPH_HEIGHT = 300.dp
+internal val DEFAULT_GRAPH_SIZE = 300.dp
 internal val DEFAULT_GRAPH_PADDING = PaddingValues(horizontal = 10.dp)
 
 private const val IS_LOGS_ON = true

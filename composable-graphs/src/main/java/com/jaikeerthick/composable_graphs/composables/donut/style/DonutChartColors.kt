@@ -1,4 +1,4 @@
-package com.jaikeerthick.composable_graphs.composables.pie.style
+package com.jaikeerthick.composable_graphs.composables.donut.style
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.BlendMode
@@ -8,9 +8,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultBlendMo
 
 
 @Stable
-data class PieChartColors(
-    val labelColor: Color = Color.White,
-    val percentageColor: Color = Color.White,
+data class DonutChartColors(
+    val inactiveProgressColor: Color = Color.LightGray,
     val colorFilter: ColorFilter? = null,
     val blendMode: BlendMode = DefaultBlendMode
 )

@@ -1,22 +1,26 @@
 package com.jaikeerthick.composable_graphs.composables.donut
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jaikeerthick.composable_graphs.composables.donut.model.DonutData
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartStyle
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartType
-import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
-import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_HEIGHT
+import com.jaikeerthick.composable_graphs.composables.donut.style.DonutSliceType
+import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
 
 
 /**
@@ -28,14 +32,14 @@ fun DonutChart(
     type: DonutChartType = DonutChartType.Normal,
     data: List<DonutData>,
     style: DonutChartStyle = DonutChartStyle(),
-    onSliceClick: (DonutData)-> Unit
+    onSliceClick: ((DonutData)-> Unit)? = null
 ) {
     DonutChartImpl(
         modifier = modifier,
         type = type,
         data = data,
         style = style,
-        onPointClick = onSliceClick
+        onSliceClick = onSliceClick
     )
 }
 
@@ -45,21 +49,70 @@ private fun DonutChartImpl(
     type: DonutChartType,
     data: List<DonutData>,
     style: DonutChartStyle,
-    onPointClick: (DonutData) -> Unit,
+    onSliceClick: ((DonutData) -> Unit)? = null,
 ) {
 
+    val donutSliceList = remember { data.mapToDonutSliceList(type = type) }
+    val ringSize = remember { style.thickness.value }
+    var radiusF = remember { 0F }
+    var centerF = remember { Offset(0F, 0F) }
+
+    val tapDetectModifier = if (onSliceClick == null) Modifier else {
+        Modifier
+            .pointerInput(Unit) {
+                detectTapGestures { p1: Offset ->
+
+                }
+            }
+    }
+
     val defaultModifier = Modifier
-        .size(size = DEFAULT_GRAPH_HEIGHT)
-        .padding(12.dp)
-
-    val donutSliceList = remember { data.mapToDonutSliceList() }
-
-    val ringSize = remember { 50.dp.value }
+        .size(DEFAULT_GRAPH_SIZE)
+        .then(tapDetectModifier)
 
     Canvas(
         modifier = modifier.then(defaultModifier),
         onDraw = {
 
+            val minWidthAndHeight = listOf(this.size.width, this.size.height).minOf { it - ringSize }
+
+            /**
+             * Don't use [center] or [size] of canvas
+             * Only use [donutCenter] and [donutSize] because we are maintaining same width and height
+             * for the Pie
+             */
+            val donutSize = Size(minWidthAndHeight, minWidthAndHeight)
+            val donutCenter = Offset(x = donutSize.width/2, y = donutSize.height/2)
+            val radius = minWidthAndHeight / 2
+
+            radiusF = radius
+            centerF = donutCenter
+
+            val cap = if (style.sliceType == DonutSliceType.Normal) StrokeCap.Butt else StrokeCap.Round
+
+            /**
+             * Draw inactive progress track when [type] is [DonutChartType.Progressive]
+             */
+            if (type is DonutChartType.Progressive){
+                drawArc(
+                    color =  type.progressInactiveColor,
+                    size = donutSize,
+                    topLeft = Offset(ringSize/2F, ringSize/2F),
+                    startAngle = 0F,
+                    sweepAngle = 360F,
+                    useCenter = true,
+                    style = Stroke(
+                        width = ringSize,
+                        cap = cap,
+                    ),
+                    blendMode = style.colors.blendMode,
+                    colorFilter = style.colors.colorFilter
+                )
+            }
+
+            /**
+             * Draw arcs for each donut slices
+             */
             donutSliceList.reversed().forEach { value ->
                 drawArc(
                     color = value.color,
@@ -68,15 +121,12 @@ private fun DonutChartImpl(
                     useCenter = false,
                     style = Stroke(
                         width = ringSize,
-                        cap = StrokeCap.Round,
+                        cap = cap,
                     ),
-                    size = this.size.copy(
-                        width = this.size.width - ringSize,
-                        height = this.size.width - ringSize,
-                    ),
+                    size = donutSize,
                     topLeft = Offset(ringSize/2F, ringSize/2F),
-                    blendMode = style.blendMode ?: DrawScope.DefaultBlendMode,
-                    colorFilter = style.colorFilter
+                    blendMode = style.colors.blendMode,
+                    colorFilter = style.colors.colorFilter
                 )
             }
         }
@@ -85,17 +135,26 @@ private fun DonutChartImpl(
 
 @Preview
 @Composable
-private fun DonutChartPreview() {
+private fun DonutChartPreviewDark() {
 
     val previewData = remember {
-        listOf(10, 20, 40, 10).map {
-            DonutData(value = it.toFloat())
+        listOf(5, 10, 20, 40, 10).map {
+            DonutData(value = it.toFloat(), label = it.toString())
         }
     }
 
     DonutChart(
+        modifier = Modifier
+            .size(300.dp)
+            .background(
+                color = Color.Black,
+                shape = RoundedCornerShape(12.dp)
+            ),
         data = previewData,
-        onSliceClick = {}
+        style = DonutChartStyle(
+            thickness = 60.dp,
+            sliceType = DonutSliceType.Normal
+        )
     )
 }
 

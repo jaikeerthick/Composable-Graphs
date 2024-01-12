@@ -2,21 +2,28 @@ package com.jaikeerthick.composable_graphs.composables.donut
 
 import com.jaikeerthick.composable_graphs.composables.donut.model.DonutSlice
 import com.jaikeerthick.composable_graphs.composables.donut.model.DonutData
+import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartType
 import com.jaikeerthick.composable_graphs.util.GraphHelper.convertPercentageToDegree
 
+internal fun List<DonutData>.mapToDonutSliceList(type: DonutChartType): List<DonutSlice>{
 
-internal class DonutChartHelper {
-
+    return when(type){
+        is DonutChartType.Normal -> {
+            this.mapToNormalDonutSliceList()
+        }
+        is DonutChartType.Progressive -> {
+            this.mapToProgressiveDonutSliceList(totalProgress = type.totalProgress)
+        }
+    }
 }
 
-internal fun List<DonutData>.mapToDonutSliceList(): List<DonutSlice>{
+private fun List<DonutData>.mapToNormalDonutSliceList(): List<DonutSlice>{
 
     val total = this.map{ it.value }.sum()
 
     var startAngleTemp = 0F
 
     return this.map { donutData ->
-
 
         val percentage = (donutData.value / total) * 100F
 
@@ -25,8 +32,27 @@ internal fun List<DonutData>.mapToDonutSliceList(): List<DonutSlice>{
 
         startAngleTemp = endAngle
 
-        println("JAIKKK --- Percentage: $percentage")
-        println("JAIKKK --- Angle: start: $startAngle, end: $endAngle")
+        // return
+        DonutSlice(
+            startAngle = startAngle,
+            endAngle = endAngle,
+            color = donutData.color,
+            label = donutData.label,
+            labelColor = donutData.labelColor
+        )
+    }
+}
+
+private fun List<DonutData>.mapToProgressiveDonutSliceList(totalProgress: Float): List<DonutSlice>{
+
+    // sort the list in ascending sequence
+    return this.sortedBy { it.value }.map { donutData ->
+
+        val percentage = (donutData.value / totalProgress) * 100F
+
+        val startAngle = 0F
+        val endAngle = convertPercentageToDegree(percentage)
+
         // return
         DonutSlice(
             startAngle = startAngle,

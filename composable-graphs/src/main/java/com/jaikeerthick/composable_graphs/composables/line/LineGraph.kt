@@ -16,7 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.jaikeerthick.composable_graphs.composables.line.model.LineData
 import com.jaikeerthick.composable_graphs.composables.line.style.LineGraphStyle
-import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_HEIGHT
+import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
 import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_PADDING
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -55,7 +55,7 @@ private fun LineGraphImpl(
 
     val defaultModifier = Modifier
         .fillMaxWidth()
-        .height(height = DEFAULT_GRAPH_HEIGHT)
+        .height(height = DEFAULT_GRAPH_SIZE)
         .padding(paddingValues = DEFAULT_GRAPH_PADDING)
         .pointerInput(true) {
 
@@ -63,13 +63,13 @@ private fun LineGraphImpl(
 
                 val shortest = offsetList.find { p2: Offset ->
 
-                    /** Pythagorean Theorem
-                     * Using Pythagorean theorem to calculate distance between two points :
+                    /**
+                     * Calculate distance between two points :
                      * p1 =  p1(x,y) which is the touch point
                      * p2 =  p2(x,y)) which is the point plotted on graph
                      * Formula: c = sqrt(a² + b²), where a = (p1.x - p2.x) & b = (p1.y - p2.y),
                      * c is the distance between p1 & p2
-                    Pythagorean Theorem */
+                    */
 
                     val distance = sqrt(
                         (p1.x - p2.x).pow(2) + (p1.y - p2.y).pow(2)

@@ -6,18 +6,13 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
@@ -28,14 +23,10 @@ import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
 import com.jaikeerthick.composable_graphs.composables.pie.model.PieSlice
 import com.jaikeerthick.composable_graphs.composables.pie.style.PieChartStyle
 import com.jaikeerthick.composable_graphs.composables.pie.style.PieChartVisibility
-import com.jaikeerthick.composable_graphs.theme.GraphAccent2
-import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_HEIGHT
-import com.jaikeerthick.composable_graphs.util.GraphHelper
+import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
 import com.jaikeerthick.composable_graphs.util.GraphHelper.centerOf
 import com.jaikeerthick.composable_graphs.util.GraphHelper.getAngleFromOffset
 import com.jaikeerthick.composable_graphs.util.GraphHelper.getOffsetOfAngle
-import kotlinx.coroutines.delay
-import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -101,8 +92,7 @@ private fun PieChartImpl(
     }
 
     val defaultModifier = Modifier
-        .size(size = DEFAULT_GRAPH_HEIGHT)
-        .padding(12.dp)
+        .size(size = DEFAULT_GRAPH_SIZE)
         .then(tapDetectModifier)
 
 
@@ -140,7 +130,7 @@ private fun PieChartImpl(
                     useCenter = true,
                     style = Fill,
                     size = pieSize,
-                    blendMode = style.colors.blendMode ?: DrawScope.DefaultBlendMode,
+                    blendMode = style.colors.blendMode,
                     colorFilter = style.colors.colorFilter
                 )
             }
@@ -221,6 +211,8 @@ private fun PieChartPreview() {
     }
 
     PieChart(
+        modifier = Modifier
+            .padding(12.dp),
         data = previewData,
         style = PieChartStyle(
             visibility = PieChartVisibility(

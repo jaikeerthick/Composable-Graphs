@@ -9,6 +9,5 @@ import com.jaikeerthick.composable_graphs.util.getRandomColor
 data class DonutData(
     val value: Float,
     val color: Color = getRandomColor(),
-    val label: String? = null,
-    val labelColor: Color? = null
+    val label: String? = null
 )
