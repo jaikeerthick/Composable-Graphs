@@ -37,8 +37,6 @@ private fun List<DonutData>.mapToNormalDonutSliceList(): List<DonutSlice>{
             startAngle = startAngle,
             endAngle = endAngle,
             color = donutData.color,
-            label = donutData.label,
-            labelColor = donutData.labelColor
         )
     }
 }
