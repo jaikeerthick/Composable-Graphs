@@ -36,6 +36,7 @@ internal fun List<PieData>.mapToPieSliceList(radius: Float, pieSize: Size): List
 
         // return
         PieSlice(
+            id = pieData.id,
             startAngle = startAngle,
             startOffset = startOffset,
             endAngle = endAngle,

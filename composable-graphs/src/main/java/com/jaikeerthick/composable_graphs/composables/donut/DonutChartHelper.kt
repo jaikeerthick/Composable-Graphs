@@ -34,6 +34,7 @@ private fun List<DonutData>.mapToNormalDonutSliceList(): List<DonutSlice>{
 
         // return
         DonutSlice(
+            id = donutData.id,
             startAngle = startAngle,
             endAngle = endAngle,
             color = donutData.color,
@@ -53,6 +54,7 @@ private fun List<DonutData>.mapToProgressiveDonutSliceList(totalProgress: Float)
 
         // return
         DonutSlice(
+            id = donutData.id,
             startAngle = startAngle,
             endAngle = endAngle,
             color = donutData.color

@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Stable
 internal data class PieSlice(
-    val id: String = UUID.randomUUID().toString(),
+    val id: String,
     val startAngle: Float,
     val startOffset: Offset,
     val endAngle: Float,

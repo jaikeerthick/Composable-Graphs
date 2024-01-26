@@ -80,8 +80,6 @@ private fun PieChartImpl(
                         }
 
                         val clickedSlice = pieSliceList.find { slice ->
-
-                            //println("JAIKKK--- check --- : start: ${slice.startAngle}, end: ${slice.endAngle}, clicked: $touchAngle")
                             (touchAngle >= slice.startAngle && touchAngle <= slice.endAngle)
                         }
                         val clickedPieData = data.find { clickedSlice?.label == it.label }

@@ -21,6 +21,11 @@ import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartStyl
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartType
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutSliceType
 import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
+import com.jaikeerthick.composable_graphs.util.GraphHelper
+import com.jaikeerthick.composable_graphs.util.logDebug
+import kotlin.math.log
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 
 /**
@@ -62,6 +67,28 @@ private fun DonutChartImpl(
             .pointerInput(Unit) {
                 detectTapGestures { p1: Offset ->
 
+                    val isInsideCircle: Boolean = let {
+                        val clickRadius = sqrt((p1.x - centerF.x).pow(2) + (p1.y - centerF.y).pow(2))
+                        (clickRadius >= (radiusF - ringSize)) && (clickRadius <= radiusF)
+                    }
+
+                    if (isInsideCircle) {
+
+                        var touchAngle = GraphHelper.getAngleFromOffset(
+                            offset = p1,
+                            radiusF
+                        ) - 270F // -270 -> because we are shifting the chart by -90F in all places
+
+                        while (touchAngle < 0F) {
+                            touchAngle += 360.0F
+                        }
+
+                        val clickedSlice = donutSliceList.find { slice ->
+                            (touchAngle >= slice.startAngle && touchAngle <= slice.endAngle)
+                        }
+                        val clickedDonutData = data.find { clickedSlice?.id == it.id }
+                        clickedDonutData?.let { onSliceClick(it) }
+                    }
                 }
             }
     }
@@ -82,12 +109,12 @@ private fun DonutChartImpl(
              * for the Pie
              */
             val donutSize = Size(minWidthAndHeight, minWidthAndHeight)
-            val donutCenter = Offset(x = donutSize.width/2, y = donutSize.height/2)
-            val radius = minWidthAndHeight / 2
+            val donutCenter = Offset(x = donutSize.width/2, y = donutSize.height/2) // TODO: Not needed, remove it in future after validation
+            val radius = (minWidthAndHeight / 2) +  (ringSize/2)
 
             radiusF = radius
-            centerF = donutCenter
-
+            centerF = center
+            
             val cap = if (style.sliceType == DonutSliceType.Normal) StrokeCap.Butt else StrokeCap.Round
 
             /**
@@ -139,7 +166,7 @@ private fun DonutChartPreviewDark() {
 
     val previewData = remember {
         listOf(5, 10, 20, 40, 10).map {
-            DonutData(value = it.toFloat(), label = it.toString())
+            DonutData(value = it.toFloat())
         }
     }
 
