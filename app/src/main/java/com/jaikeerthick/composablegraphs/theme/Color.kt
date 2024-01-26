@@ -2,6 +2,10 @@ package com.jaikeerthick.composablegraphs.theme
 
 import androidx.compose.ui.graphics.Color
 
+internal val PrimaryColor = Color(0xFF31D573)
+internal val BackgroundColor = Color(0xFF0D100E)
+internal val BackgroundColor2 = Color(0xFF232A23)
+
 internal val GraphAccent = Color(0xFF9C27B0)
 internal val GraphAccent2 = Color(0xFF239728)
 

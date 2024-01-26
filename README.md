@@ -34,8 +34,10 @@ dependencies {
 ## Preview
 
 <p>
-<img width="250px" src="/Screenshot-1.png"/>
-&nbsp;&nbsp;&nbsp;<img width="250px" src="/Screenshot-2.png" />
+<img width="250px" src="/screenshot/Screenshot-1.png"/>
+&nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-2.png" />
+<img width="250px" src="/screenshot/Screenshot-3.png"/>
+&nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-4.png" />
 <p/>
 <br/>
 
