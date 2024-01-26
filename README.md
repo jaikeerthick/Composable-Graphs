@@ -39,7 +39,8 @@ dependencies {
 <img width="250px" src="/screenshot/Screenshot-1.png"/>
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-2.png" />
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-3.png"/>
-&nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-4.png" />
+<br/><br/>
+<img width="250px" src="/screenshot/Screenshot-4.png" />
 <p/>
 <br/>
 
