@@ -30,13 +30,15 @@ dependencies {
 ## Graphs Available
 1. Line Graph
 2. Bar Graph
+3. Pie Chart
+4. Donut Chart (Normal, Progressive)
 
 ## Preview
 
 <p>
 <img width="250px" src="/screenshot/Screenshot-1.png"/>
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-2.png" />
-<img width="250px" src="/screenshot/Screenshot-3.png"/>
+&nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-3.png"/>
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-4.png" />
 <p/>
 <br/>
@@ -64,6 +66,48 @@ LineGraph(
 ```kotlin
 BarGraph(
     data = listOf(BarData(x = "22", y = 20), BarData(x = "23", y = 30)),
+)
+```
+
+### 3. Pie Chart
+```kotlin
+// sample data
+val pieChartData = listOf(
+    PieData(value = 130F, label = "HTC", color = Color.Green),
+    PieData(value = 260F, label = "Apple", labelColor = Color.Blue),
+    PieData(value = 500F, label = "Google"),
+)
+
+// composable
+PieChart(
+    modifier = Modifier
+        .padding(vertical = 20.dp)
+        .size(220.dp),
+    data = pieChartData,
+    onSliceClick = { pieData ->
+        Toast.makeText(context, "${pieData.label}", Toast.LENGTH_SHORT).show()
+    }
+)
+```
+### 4. Donut Chart
+Donut Chart supports 2 types of implementations: ```DonutChartType.Normal``` and ```DonutChartType.Progressive()```
+```kotlin
+// sample values
+val donutChartData = listOf(
+    DonutData(value = 30F),
+    DonutData(value = 60F),
+    DonutData(value = 70F),
+    DonutData(value = 50F),
+)
+
+// composable
+DonutChart(
+    modifier = Modifier
+        .padding(vertical = 20.dp)
+        .size(220.dp),
+    data = donutChartData,
+    type = DonutChartType.Progressive(),
+    style = viewModel.donutChartStyle,
 )
 ```
 
@@ -101,13 +145,24 @@ val style2 = LineGraphStyle(
 ````
 
 
-## Work In Progress:
+## Work In Progress (v1.2.4) :
 
-1. PieChart
-2. DonutChart
+### Features
+- Show y values above points & bars (sticky)
+
+### Interaction
+- Ability to turn off interaction on charts (disable clicks)
+
+### Grid
+- Customize grid color
+- Ability to control visibility of x and y axis grids separately
+
+### Highlight
+- Highlight Shape for Line Graph - Circle, HallowedCircle, Triangle, Square
+- Control size of the highlight
 
 <br/>
 <br/>
 
-## Contribution are welcome ❤️
+## Contributions are welcome ❤️
 
