@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultBlendMo
 
 @Stable
 data class DonutChartColors(
-    val inactiveProgressColor: Color = Color.LightGray,
     val colorFilter: ColorFilter? = null,
     val blendMode: BlendMode = DefaultBlendMode
 )

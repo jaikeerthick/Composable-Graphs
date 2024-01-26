@@ -133,10 +133,10 @@ private fun PieChartImpl(
                 )
             }
 
-            val defaultTextSize = if ((radiusF/16).sp >= 14.sp) 14.sp else (radiusF/16).sp
+            //val defaultTextSize = if ((radiusF/16).sp >= 14.sp) 14.sp else (radiusF/16).sp
             val marginBetweenTexts =
                 if (style.visibility.isLabelVisible && style.visibility.isPercentageVisible) {
-                    (defaultTextSize/1.5).toPx()
+                    (style.labelSize/1.5).toPx()
                 } else 0.sp.toPx()
 
             /**
@@ -160,7 +160,7 @@ private fun PieChartImpl(
                             Paint().apply {
                                 color = value.labelColor?.toArgb() ?: Color.White.toArgb()
                                 textAlign = Paint.Align.CENTER
-                                this.textSize = defaultTextSize.toPx()
+                                this.textSize = style.labelSize.toPx()
                             }
                         )
                     }
@@ -186,7 +186,7 @@ private fun PieChartImpl(
                         Paint().apply {
                             color = value.labelColor?.toArgb() ?: Color.White.toArgb()
                             textAlign = Paint.Align.CENTER
-                            this.textSize = defaultTextSize.toPx()
+                            this.textSize = style.percentageSize.toPx()
                         }
                     )
                 }
