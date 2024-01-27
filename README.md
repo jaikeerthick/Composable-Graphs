@@ -24,7 +24,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.jaikeerthick:Composable-Graphs:v1.2.2'
+    implementation 'com.github.jaikeerthick:Composable-Graphs:v{version}'//ex: v1.2.3
 }
 ```
 ## Graphs Available
