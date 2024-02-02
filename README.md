@@ -16,16 +16,19 @@ Please migrate to ```v1.2.2``` or above if you are using lower versions and refe
 ## Gradle Setup
 Latest version: [![](https://jitpack.io/v/jaikeerthick/Composable-Graphs.svg)](https://jitpack.io/#jaikeerthick/Composable-Graphs)
 
-```gradle
-allprojects {
+In ```settings.gradle.kts```, Add jitpack url
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url "https://jitpack.io" }
+        ...
+        maven(url = "https://jitpack.io") // Add jitpack
     }
 }
-
-dependencies {
-    implementation 'com.github.jaikeerthick:Composable-Graphs:v{version}'//ex: v1.2.3
-}
+```
+In ```build.gradle.kts```, in ```dependencies``` block, add
+```kotlin
+implementation("com.github.jaikeerthick:Composable-Graphs:v{version}") //ex: v1.2.3
 ```
 ## Graphs Available
 1. Line Graph
