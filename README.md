@@ -24,7 +24,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.jaikeerthick:Composable-Graphs:v1.2.2'
+    implementation 'com.github.jaikeerthick:Composable-Graphs:v{version}'//ex: v1.2.3
 }
 ```
 ## Graphs Available
@@ -39,7 +39,8 @@ dependencies {
 <img width="250px" src="/screenshot/Screenshot-1.png"/>
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-2.png" />
 &nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-3.png"/>
-&nbsp;&nbsp;&nbsp;<img width="250px" src="/screenshot/Screenshot-4.png" />
+<br/><br/>
+<img width="250px" src="/screenshot/Screenshot-4.png" />
 <p/>
 <br/>
 
