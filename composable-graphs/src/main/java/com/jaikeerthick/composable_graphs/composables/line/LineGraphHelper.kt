@@ -67,12 +67,18 @@ internal class LineGraphHelper(
         val absMaxY = GraphHelper.getAbsoluteMax(yAxisData)
         val absMinY = 0
 
-        val verticalStep = absMaxY.toInt() / maxPointsSize.toFloat()
+        // prevent duplication of y labels when yAxisData list has same values
+        val numberOfVerticalSteps =
+            if (yAxisData.contains(0))
+                yAxisData.distinct().size - 1
+            else
+                yAxisData.distinct().size
+        val verticalStep = absMaxY.toInt() / numberOfVerticalSteps.toFloat()
 
         // generate y axis label
         val yAxisLabelList = mutableListOf<String>()
 
-        for (i in 0..maxPointsSize) {
+        for (i in 0..numberOfVerticalSteps) {
             val intervalValue = (verticalStep*i).roundToInt()
             logDebug(message = "interval - $intervalValue")
             yAxisLabelList.add(intervalValue.toString())
