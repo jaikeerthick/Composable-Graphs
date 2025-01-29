@@ -67,13 +67,20 @@ internal class LineGraphHelper(
         val absMaxY = GraphHelper.getAbsoluteMax(yAxisData)
         val absMinY = 0
 
+        val distinctYSize = yAxisData.distinct().size
         // prevent duplication of y labels when yAxisData list has same values
+        // distinctYSize != 1 prevents having 0 vertical steps when every y data is 0
         val numberOfVerticalSteps =
-            if (yAxisData.contains(0))
-                yAxisData.distinct().size - 1
+            if (distinctYSize != 1 && yAxisData.contains(0))
+                distinctYSize - 1
             else
-                yAxisData.distinct().size
-        val verticalStep = absMaxY.toInt() / numberOfVerticalSteps.toFloat()
+                distinctYSize
+        // prevent a vertical step of 0 which would duplicate the 0 label
+        val verticalStep =
+            if (absMaxY == 0)
+                1F
+            else
+                absMaxY.toInt() / numberOfVerticalSteps.toFloat()
 
         // generate y axis label
         val yAxisLabelList = mutableListOf<String>()
