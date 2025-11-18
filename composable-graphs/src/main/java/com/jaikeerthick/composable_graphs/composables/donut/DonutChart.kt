@@ -3,6 +3,7 @@ package com.jaikeerthick.composable_graphs.composables.donut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -188,21 +189,26 @@ private fun DonutChartImpl(
 
 @Preview
 @Composable
-private fun DonutChartPreviewDark() {
+private fun DonutChartPreview() {
 
     val previewData = remember {
-        listOf(5, 10, 20, 40, 10).map {
-            DonutData(value = it.toFloat())
-        }
+        listOf(
+            DonutData(value = 5F, color = Color(0xFF006078)),
+            DonutData(value = 10F, color = Color(0xFF76A787)),
+            DonutData(value = 20F, color = Color(0xFFAE82D9)),
+            DonutData(value = 40F, color = Color(0xFFE37C78)),
+            DonutData(value = 10F, color = Color(0xFFFFD4D1)),
+        )
     }
 
     DonutChart(
         modifier = Modifier
             .size(300.dp)
             .background(
-                color = Color.Black,
+                color = Color.White,
                 shape = RoundedCornerShape(12.dp)
-            ),
+            )
+            .padding(16.dp),
         data = previewData,
         style = DonutChartStyle(
             thickness = 60.dp,
