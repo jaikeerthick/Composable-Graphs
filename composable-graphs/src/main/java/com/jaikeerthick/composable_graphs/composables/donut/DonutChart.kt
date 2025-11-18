@@ -12,18 +12,18 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jaikeerthick.composable_graphs.composables.donut.model.DonutData
+import com.jaikeerthick.composable_graphs.composables.donut.model.DonutSlice
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartStyle
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutChartType
 import com.jaikeerthick.composable_graphs.composables.donut.style.DonutSliceType
 import com.jaikeerthick.composable_graphs.util.DEFAULT_GRAPH_SIZE
 import com.jaikeerthick.composable_graphs.util.GraphHelper
-import com.jaikeerthick.composable_graphs.util.logDebug
-import kotlin.math.log
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -109,12 +109,11 @@ private fun DonutChartImpl(
              * for the Pie
              */
             val donutSize = Size(minWidthAndHeight, minWidthAndHeight)
-            val donutCenter = Offset(x = donutSize.width/2, y = donutSize.height/2) // TODO: Not needed, remove it in future after validation
             val radius = (minWidthAndHeight / 2) +  (ringSize/2)
 
             radiusF = radius
             centerF = center
-            
+
             val cap = if (style.sliceType == DonutSliceType.Normal) StrokeCap.Butt else StrokeCap.Round
 
             /**
@@ -140,7 +139,11 @@ private fun DonutChartImpl(
             /**
              * Draw arcs for each donut slices
              */
-            donutSliceList.reversed().forEach { value ->
+            var lastSlice: DonutSlice? = null
+            donutSliceList.reversed().forEachIndexed { index, value ->
+
+                if (index == 0) { lastSlice = value }
+
                 drawArc(
                     color = value.color,
                     startAngle = - 90F, // -90F to rotate the arcs straight
@@ -155,6 +158,29 @@ private fun DonutChartImpl(
                     blendMode = style.colors.blendMode,
                     colorFilter = style.colors.colorFilter
                 )
+
+                val shouldDrawLoopingArc =  style.sliceType is DonutSliceType.Rounded &&
+                        lastSlice != null &&
+                        type !is DonutChartType.Progressive &&
+                        style.thickness < minWidthAndHeight.dp
+
+                if (shouldDrawLoopingArc) {
+
+                    // To make sure `lastSlice` will not be null because it's mutable
+                    val assuredLastSlice: DonutSlice = lastSlice ?: return@forEachIndexed
+
+                    drawCircle(
+                        color = assuredLastSlice.color,
+                        radius = ringSize / 2,
+                        center = Offset(
+                            x = (minWidthAndHeight / 2) + ((ringSize / 2) - 1),
+                            y = ringSize / 2
+                        ),
+                        style = Fill,
+                        blendMode = style.colors.blendMode,
+                        colorFilter = style.colors.colorFilter
+                    )
+                }
             }
         }
     )
@@ -180,8 +206,7 @@ private fun DonutChartPreviewDark() {
         data = previewData,
         style = DonutChartStyle(
             thickness = 60.dp,
-            sliceType = DonutSliceType.Normal
+            sliceType = DonutSliceType.Rounded
         )
     )
 }
-
