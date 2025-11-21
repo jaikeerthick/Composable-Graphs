@@ -165,6 +165,8 @@ private fun DonutChartImpl(
                         type !is DonutChartType.Progressive &&
                         style.thickness < minWidthAndHeight.dp
 
+                println("JAIKKK -- lastslice end angle: ${lastSlice?.endAngle}, start angle: ${lastSlice?.startAngle}")
+
                 if (shouldDrawLoopingArc) {
 
                     // To make sure `lastSlice` will not be null because it's mutable
