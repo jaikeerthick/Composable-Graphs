@@ -17,6 +17,7 @@ import com.jaikeerthick.composable_graphs.util.GraphHelper
 import com.jaikeerthick.composable_graphs.style.LabelPosition
 import com.jaikeerthick.composable_graphs.composables.line.style.LineGraphStyle
 import com.jaikeerthick.composable_graphs.util.logDebug
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 internal data class LineGraphMetrics(
@@ -80,7 +81,7 @@ internal class LineGraphHelper(
             if (absMaxY == 0)
                 1F
             else
-                absMaxY.toInt() / numberOfVerticalSteps.toFloat()
+                ceil(absMaxY.toDouble()).toInt() / numberOfVerticalSteps.toFloat()
 
         // generate y axis label
         val yAxisLabelList = mutableListOf<String>()
