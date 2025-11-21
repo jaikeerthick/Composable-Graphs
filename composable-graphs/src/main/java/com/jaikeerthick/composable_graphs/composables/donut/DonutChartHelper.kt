@@ -23,7 +23,7 @@ private fun List<DonutData>.mapToNormalDonutSliceList(): List<DonutSlice>{
 
     var startAngleTemp = 0F
 
-    return this.map { donutData ->
+    return this.filterNot{ it.value == 0F }.rotateAwayFromMinValue().map { donutData ->
 
         val percentage = (donutData.value / total) * 100F
 
@@ -45,7 +45,7 @@ private fun List<DonutData>.mapToNormalDonutSliceList(): List<DonutSlice>{
 private fun List<DonutData>.mapToProgressiveDonutSliceList(totalProgress: Float): List<DonutSlice>{
 
     // sort the list in ascending sequence
-    return this.sortedBy { it.value }.map { donutData ->
+    return this.filterNot{ it.value == 0F }.sortedBy { it.value }.map { donutData ->
 
         val percentage = (donutData.value / totalProgress) * 100F
 
@@ -59,5 +59,30 @@ private fun List<DonutData>.mapToProgressiveDonutSliceList(totalProgress: Float)
             endAngle = endAngle,
             color = donutData.color
         )
+    }
+}
+
+private fun List<DonutData>.rotateAwayFromMinValue(): List<DonutData> {
+
+    if (this.isEmpty()) return this
+
+    val minValue = this.minOf { it.value }
+
+    val lastMinIndex = this.indexOfLast { it.value == minValue }
+
+    if (lastMinIndex != this.lastIndex) return this
+
+    if (this.all { it.value == minValue }) {
+        return this.drop(1) + this.take(1)
+    }
+
+    val firstNonMinAfterLastMin = this.drop(lastMinIndex + 1)
+        .indexOfFirst { it.value != minValue }
+
+    return if (firstNonMinAfterLastMin >= 0) {
+        val rotationAmount = lastMinIndex + 1 + firstNonMinAfterLastMin
+        this.drop(rotationAmount) + this.take(rotationAmount)
+    } else {
+        this.drop(1) + this.take(1)
     }
 }
